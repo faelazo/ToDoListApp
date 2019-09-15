@@ -1,0 +1,16 @@
+.formRadios > label{
+    margin: 10px;
+}
+
+.formRadios > button{
+    float: right;
+}
+
+td > img:hover{
+    cursor: pointer;
+    background: #ffA;
+}
+
+.formRadios > label, label>input:hover{
+    cursor: pointer;
+}
