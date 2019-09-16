@@ -7,28 +7,48 @@ using ToDoListApp.Entity;
 
 namespace ToDoListApp.Service
 {
-    public class ToDoListService
+    public class ToDoListService: IToDoListService
     {
-        private ToDoListRepository tdlRepository;
+        private IToDoListRepository tdlRepository;
 
         public ToDoListService()
         {
             this.tdlRepository = new ToDoListRepository();
         }
 
-        public IEnumerable<ItemList> getUserTasks(int startUserID)
+        public IEnumerable<ItemList> getUserTasks(int userID)
         {
-            return this.tdlRepository.getUserTasks(startUserID);
+            List<ItemRepository> items = this.tdlRepository.getUserTasks(userID);
+
+            List<ItemList> tasksList = new List<ItemList>();
+
+            foreach(ItemRepository iter in items)
+            {
+                tasksList.Add(new ItemList(iter.id, iter.description, iter.state, iter.userID));
+            }
+
+            return tasksList;
         }
 
         public ItemList addTask(int startUserID, string task)
         {
-            return this.tdlRepository.addTask(startUserID, task);
+            ItemRepository itemRep = this.tdlRepository.addTask(startUserID, task);
+
+            return new ItemList(itemRep.id, itemRep.description, itemRep.state, itemRep.userID);
         }
 
-        public List<ItemList> changeStateTask(int taskID)
+        public IEnumerable<ItemList> changeStateTask(int taskID)
         {
-            return this.tdlRepository.changeStateTask(taskID);
+            List<ItemRepository> listRep = this.tdlRepository.changeStateTask(taskID);
+
+            List<ItemList> items = new List<ItemList>();
+
+            foreach(ItemRepository itemRep in listRep)
+            {
+                items.Add(new ItemList(itemRep.id, itemRep.description, itemRep.state, itemRep.userID));
+            }
+
+            return items;
         }
     }
 }

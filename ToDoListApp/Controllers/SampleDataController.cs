@@ -34,7 +34,7 @@ namespace ToDoListApp.Controllers
         }
 
         [HttpGet("[action]")]
-        public List<ItemList> ChangeStateTask(int taskID)
+        public IEnumerable<ItemList> ChangeStateTask(int taskID)
         {
             return this.tdlService.changeStateTask(taskID);
         }

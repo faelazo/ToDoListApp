@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using ToDoListApp.Repository;
-using ToDoListApp.Entity;
 
 namespace ToDoListApp.Repository
 {
-    public class ToDoListRepository
+    public class ToDoListRepository: IToDoListRepository
     {
         private const string pasthJSON = @"./Data/tasks.json";
         private static string[] States = new[]
@@ -16,76 +14,92 @@ namespace ToDoListApp.Repository
             "Completed", "Pending"
         };
 
-        public IEnumerable<ItemList> getUserTasks(int startUserID)
+        private List<ItemRepository> tasks;
+
+        public void loadTasks()
         {
-            return this.getTasks(startUserID);
+            this.tasks = JsonConvert.DeserializeObject<List<ItemRepository>>(System.IO.File.ReadAllText(pasthJSON));
         }
 
-        public ItemList addTask(int startUserID, string task)
+        public void loadUserTasks(int userID)
         {
-            List<ItemList> tasks = JsonConvert.DeserializeObject<List<ItemList>>(System.IO.File.ReadAllText(pasthJSON));
+            List<ItemRepository> tasksFromFile = JsonConvert.DeserializeObject<List<ItemRepository>>(System.IO.File.ReadAllText(pasthJSON));
 
+            this.tasks = new List<ItemRepository>();
+
+            foreach (ItemRepository task in tasksFromFile)
+            {
+                if (task.userID == userID)
+                {
+                    this.tasks.Add(task);
+                }
+            }
+        }
+
+        public List<ItemRepository> getUserTasks(int userID)
+        {
+            this.loadUserTasks(userID);
+
+            List<ItemRepository> userTasks = new List<ItemRepository>();
+
+            foreach (ItemRepository task in this.tasks)
+            {
+                if (task.userID == userID)
+                {
+                    userTasks.Add(task);
+                }
+            }
+
+            return userTasks;
+        }
+
+        public ItemRepository addTask(int user, string task)
+        {
             int id = 1;
 
-            if (tasks.Count > 0) id = tasks.Last().TaskID + 1;
+            if (this.tasks == null) this.loadUserTasks(user);
 
-            ItemList newTask = new ItemList
+            if (this.tasks.Count > 0) id = this.tasks.Last().id + 1;
+
+            ItemRepository newTask = new ItemRepository
             {
-                TaskID = id,
-                Description = task,
-                State = States[1],
-                UserID = startUserID
+                id = id,
+                description = task,
+                state = States[1],
+                userID = user
             };
 
-            tasks.Add(newTask);
+            this.tasks.Add(newTask);
 
-            System.IO.File.WriteAllText(pasthJSON, JsonConvert.SerializeObject(tasks));
+            System.IO.File.WriteAllText(pasthJSON, JsonConvert.SerializeObject(this.tasks));
 
             return newTask;
         }
 
-        public List<ItemList> changeStateTask(int taskID)
+        public List<ItemRepository> changeStateTask(int taskID)
         {
-            List<ItemList> tasks = JsonConvert.DeserializeObject<List<ItemList>>(System.IO.File.ReadAllText(pasthJSON));
-
             int index = 0;
             bool found = false;
             int userID = 0;
 
-            while (!found && index < tasks.Count)
+            if (this.tasks == null) this.loadTasks();
+
+            while (!found && index < this.tasks.Count)
             {
-                if (tasks[index].TaskID == taskID)
+                if (this.tasks[index].id == taskID)
                 {
-                    if (tasks[index].State == States[0]) tasks[index].State = States[1];
-                    else tasks[index].State = States[0];
+                    if (this.tasks[index].state == States[0]) this.tasks[index].state = States[1];
+                    else this.tasks[index].state = States[0];
                     found = true;
-                    userID = tasks[index].UserID;
+                    userID = this.tasks[index].userID;
                 }
 
                 index++;
             }
 
-            System.IO.File.WriteAllText(pasthJSON, JsonConvert.SerializeObject(tasks));
+            System.IO.File.WriteAllText(pasthJSON, JsonConvert.SerializeObject(this.tasks));
 
-            return this.getTasks(userID);
+            return this.getUserTasks(userID);
         }
-
-        private List<ItemList> getTasks(int userID)
-        {
-            List<ItemList> tasksFromFile = JsonConvert.DeserializeObject<List<ItemList>>(System.IO.File.ReadAllText(pasthJSON));
-
-            List<ItemList> tasks = new List<ItemList>();
-
-            foreach (ItemList task in tasksFromFile)
-            {
-                if (task.UserID == userID)
-                {
-                    tasks.Add(task);
-                }
-            }
-
-            return tasks;
-        }
-
     }
 }
