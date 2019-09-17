@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ToDoListApp.Entity;
 
@@ -22,17 +23,36 @@ namespace ToDoListApp.Controllers
         }
 
 
-        [HttpGet("[action]")]
-        public ItemList AddTask(int startUserID, string task)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> AddTask([FromBody] TaskModified taskMod)
         {
-            return this.tdlService.addTask(startUserID, task);
+            ItemList newItem = await this.tdlService.addTask(taskMod.userID, taskMod.task);
+
+            if (newItem == null)
+                BadRequest("Task Not Found");
+
+            this.tdlService.save();
+
+            return Ok(value: newItem);
         }
 
-        [HttpGet("[action]")]
-        public IEnumerable<ItemList> ChangeStateTask(int taskID)
+        public class TaskModified
         {
-            return this.tdlService.changeStateTask(taskID);
+            public int userID { get; set; }
+            public string task { get; set; }
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> ChangeStateTask([FromBody] int id)
+        {
+            int userID = await this.tdlService.changeStateTask(id);
+
+            if (userID == 0)
+                BadRequest("Task Not Found");
+
+            this.tdlService.save();
+
+            return Ok(value: this.tdlService.getUserTasks(userID));
+        }
     }
 }

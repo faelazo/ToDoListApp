@@ -11,6 +11,8 @@ namespace ToDoListApp.Repository
 
         ItemRepository addTask(int startUserID, string task);
 
-        List<ItemRepository> changeStateTask(int taskID);
+        void save();
+
+        int changeStateTask(int taskID);
     }
 }

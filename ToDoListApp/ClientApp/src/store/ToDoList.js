@@ -23,12 +23,19 @@ export const actionCreators = {
 
         dispatch({ type: receiveToDoListType, startUserID, tasks });
     },
-    changeStateTask: (taskID) => async (dispatch, getState) => {
+    changeStateTask: (taskID) => async (dispatch) => {
 
-        const url = `api/ToDoList/ChangeStateTask?taskID=${taskID}`;
-        const response = await fetch(url);
+        const params = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: taskID 
+        };
+
+        const response = await fetch('api/ToDoList/ChangeStateTask', params);
         const tasks = await response.json();
-
+        console.log(tasks);
         dispatch({ type: changeStateTaskType, tasks });
     },
     all: () => ({ type: allFilterType }),

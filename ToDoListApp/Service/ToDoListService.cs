@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ToDoListApp.Repository;
 using ToDoListApp.Entity;
+using System.Threading.Tasks;
 
 namespace ToDoListApp.Service
 {
@@ -15,32 +16,33 @@ namespace ToDoListApp.Service
 
         public IEnumerable<ItemList> getUserTasks(int userID)
         {
-            List<ItemRepository> items = this.tdlRepository.getUserTasks(userID);
+            List<ItemRepository> listRep = this.tdlRepository.getUserTasks(userID);
 
-            List<ItemList> tasksList = new List<ItemList>();
-
-            foreach(ItemRepository iter in items)
-            {
-                tasksList.Add(new ItemList(iter.id, iter.description, iter.state, iter.userID));
-            }
-
-            return tasksList;
+            return this.getList(listRep);
         }
 
-        public ItemList addTask(int startUserID, string task)
+        public async Task<ItemList> addTask(int startUserID, string task)
         {
             ItemRepository itemRep = this.tdlRepository.addTask(startUserID, task);
 
             return new ItemList(itemRep.id, itemRep.description, itemRep.state, itemRep.userID);
         }
 
-        public IEnumerable<ItemList> changeStateTask(int taskID)
+        public void save()
         {
-            List<ItemRepository> listRep = this.tdlRepository.changeStateTask(taskID);
+            this.tdlRepository.save();
+        }
 
+        public async Task<int> changeStateTask(int taskID)
+        {
+            return this.tdlRepository.changeStateTask(taskID);
+        }
+
+        private List<ItemList> getList(List<ItemRepository> listRep)
+        {
             List<ItemList> items = new List<ItemList>();
 
-            foreach(ItemRepository itemRep in listRep)
+            foreach (ItemRepository itemRep in listRep)
             {
                 items.Add(new ItemList(itemRep.id, itemRep.description, itemRep.state, itemRep.userID));
             }

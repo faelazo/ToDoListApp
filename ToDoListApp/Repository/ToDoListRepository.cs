@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-using ToDoListApp.Commons;
 
 namespace ToDoListApp.Repository
 {
@@ -9,12 +8,12 @@ namespace ToDoListApp.Repository
     {
         private List<ItemRepository> tasks;
 
-        public async void loadTasks()
+        public void loadTasks()
         {
             this.tasks = JsonConvert.DeserializeObject<List<ItemRepository>>(System.IO.File.ReadAllText(Commons.Commons.pasthJSON));
         }
 
-        public async void loadUserTasks(int userID)
+        public void loadUserTasks(int userID)
         {
             List<ItemRepository> tasksFromFile = JsonConvert.DeserializeObject<List<ItemRepository>>(System.IO.File.ReadAllText(Commons.Commons.pasthJSON));
 
@@ -52,7 +51,7 @@ namespace ToDoListApp.Repository
 
             if (this.tasks == null)
             {
-                this.loadUserTasks(user);
+                this.loadTasks();
             }
 
             if (this.tasks.Count > 0)
@@ -70,12 +69,29 @@ namespace ToDoListApp.Repository
 
             this.tasks.Add(newTask);
 
-            System.IO.File.WriteAllText(Commons.Commons.pasthJSON, JsonConvert.SerializeObject(this.tasks));
-
             return newTask;
         }
 
-        public List<ItemRepository> changeStateTask(int taskID)
+        public void save()
+        {
+            if (this.tasks != null)
+            {
+                List<ItemRepository> tasksFile = JsonConvert.DeserializeObject<List<ItemRepository>>(System.IO.File.ReadAllText(Commons.Commons.pasthJSON));
+
+                foreach(ItemRepository item in this.tasks)
+                {
+                    if (tasksFile.Contains(item))
+                    {
+                        tasksFile.Remove(item);
+                    }
+                    tasksFile.Add(item);
+                }
+
+                System.IO.File.WriteAllText(Commons.Commons.pasthJSON, JsonConvert.SerializeObject(tasksFile));
+            }
+        }
+
+        public int changeStateTask(int taskID)
         {
             int index = 0;
             bool found = false;
@@ -105,9 +121,7 @@ namespace ToDoListApp.Repository
                 index++;
             }
 
-            System.IO.File.WriteAllText(Commons.Commons.pasthJSON, JsonConvert.SerializeObject(this.tasks));
-
-            return this.getUserTasks(userID);
+            return userID;
         }
     }
 }

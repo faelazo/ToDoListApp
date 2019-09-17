@@ -15,8 +15,16 @@ export const actionCreators = {
 
         dispatch({ type: requestAddNewTaskType, startUserID });
         
-        const url = `api/ToDoList/AddTask?startUserID=${startUserID}&task=${newTask}`;
-        const response = await fetch(url);
+        const url = "api/ToDoList/AddTask";
+        const params = {
+            method: "POST",
+            body: JSON.stringify({ userID: startUserID, task: newTask }), 
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };  
+        console.log(params);
+        const response = await fetch(url, params);
         const respTask = await response.json();
 
         dispatch({ type: receiveAddNewTaskType, startUserID, respTask });
