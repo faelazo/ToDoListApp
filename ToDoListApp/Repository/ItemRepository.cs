@@ -22,5 +22,10 @@ namespace ToDoListApp.Repository
                 return (id == p.id);
             }
         }
+
+        public override int GetHashCode()
+        {
+            return id^2;
+        }
     }
 }

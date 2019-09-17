@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace ToDoListApp.Repository
@@ -45,7 +46,7 @@ namespace ToDoListApp.Repository
             return userTasks;
         }
 
-        public ItemRepository addTask(int user, string task)
+        public async Task<ItemRepository> addTask(int user, string task)
         {
             int id = 1;
 
@@ -91,7 +92,7 @@ namespace ToDoListApp.Repository
             }
         }
 
-        public int changeStateTask(int taskID)
+        public async Task<int> changeStateTask(int taskID)
         {
             int index = 0;
             bool found = false;

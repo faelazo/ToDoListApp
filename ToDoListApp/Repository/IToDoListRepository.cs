@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ToDoListApp.Repository
 {
@@ -9,10 +10,10 @@ namespace ToDoListApp.Repository
 
         List<ItemRepository> getUserTasks(int startUserID);
 
-        ItemRepository addTask(int startUserID, string task);
+        Task<ItemRepository> addTask(int startUserID, string task);
 
         void save();
 
-        int changeStateTask(int taskID);
+        Task<int> changeStateTask(int taskID);
     }
 }

@@ -23,7 +23,7 @@ namespace ToDoListApp.Service
 
         public async Task<ItemList> addTask(int startUserID, string task)
         {
-            ItemRepository itemRep = this.tdlRepository.addTask(startUserID, task);
+            ItemRepository itemRep = await this.tdlRepository.addTask(startUserID, task);
 
             return new ItemList(itemRep.id, itemRep.description, itemRep.state, itemRep.userID);
         }
@@ -35,7 +35,7 @@ namespace ToDoListApp.Service
 
         public async Task<int> changeStateTask(int taskID)
         {
-            return this.tdlRepository.changeStateTask(taskID);
+            return await this.tdlRepository.changeStateTask(taskID);
         }
 
         private List<ItemList> getList(List<ItemRepository> listRep)

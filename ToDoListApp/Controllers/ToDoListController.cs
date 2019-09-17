@@ -19,21 +19,34 @@ namespace ToDoListApp.Controllers
         [HttpGet("[action]")]
         public IEnumerable<ItemList> Tasks(int startUserID)
         {
-            return this.tdlService.getUserTasks(startUserID);
+            try { 
+                return this.tdlService.getUserTasks(startUserID);
+            }
+            catch (System.Exception e)
+            {
+                return null;
+            }
         }
 
 
         [HttpPost("[action]")]
         public async Task<IActionResult> AddTask([FromBody] TaskModified taskMod)
         {
-            ItemList newItem = await this.tdlService.addTask(taskMod.userID, taskMod.task);
+            try
+            {
+                ItemList newItem = await this.tdlService.addTask(taskMod.userID, taskMod.task);
 
-            if (newItem == null)
-                BadRequest("Task Not Found");
+                if (newItem == null)
+                    return BadRequest("Task Not Found");
 
-            this.tdlService.save();
+                this.tdlService.save();
 
-            return Ok(value: newItem);
+                return Ok(value: newItem);
+            }
+            catch (System.Exception e)
+            {
+                return BadRequest("Internal Error");
+            }
         }
 
         public class TaskModified
@@ -45,14 +58,20 @@ namespace ToDoListApp.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> ChangeStateTask([FromBody] int id)
         {
-            int userID = await this.tdlService.changeStateTask(id);
+            try { 
+                int userID = await this.tdlService.changeStateTask(id);
 
-            if (userID == 0)
-                BadRequest("Task Not Found");
+                if (userID == 0)
+                    return BadRequest("Task Not Found");
 
-            this.tdlService.save();
+                this.tdlService.save();
 
-            return Ok(value: this.tdlService.getUserTasks(userID));
+                return Ok(value: this.tdlService.getUserTasks(userID));
+            }
+            catch (System.Exception e)
+            {
+                return BadRequest("Internal Error");
+            }
         }
     }
 }
