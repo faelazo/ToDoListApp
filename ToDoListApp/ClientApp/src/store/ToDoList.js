@@ -17,7 +17,7 @@ export const actionCreators = {
 
         dispatch({ type: requestToDoListType, startUserID });
 
-        const url = `api/SampleData/Tasks?startUserID=${startUserID}`;
+        const url = `api/ToDoList/Tasks?startUserID=${startUserID}`;
         const response = await fetch(url);
         const tasks = await response.json();
 
@@ -25,7 +25,7 @@ export const actionCreators = {
     },
     changeStateTask: (taskID) => async (dispatch, getState) => {
 
-        const url = `api/SampleData/ChangeStateTask?taskID=${taskID}`;
+        const url = `api/ToDoList/ChangeStateTask?taskID=${taskID}`;
         const response = await fetch(url);
         const tasks = await response.json();
 

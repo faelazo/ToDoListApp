@@ -1,29 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
+using ToDoListApp.Commons;
 
 namespace ToDoListApp.Repository
 {
     public class ToDoListRepository: IToDoListRepository
     {
-        private const string pasthJSON = @"./Data/tasks.json";
-        private static string[] States = new[]
-        {
-            "Completed", "Pending"
-        };
-
         private List<ItemRepository> tasks;
 
-        public void loadTasks()
+        public async void loadTasks()
         {
-            this.tasks = JsonConvert.DeserializeObject<List<ItemRepository>>(System.IO.File.ReadAllText(pasthJSON));
+            this.tasks = JsonConvert.DeserializeObject<List<ItemRepository>>(System.IO.File.ReadAllText(Commons.Commons.pasthJSON));
         }
 
-        public void loadUserTasks(int userID)
+        public async void loadUserTasks(int userID)
         {
-            List<ItemRepository> tasksFromFile = JsonConvert.DeserializeObject<List<ItemRepository>>(System.IO.File.ReadAllText(pasthJSON));
+            List<ItemRepository> tasksFromFile = JsonConvert.DeserializeObject<List<ItemRepository>>(System.IO.File.ReadAllText(Commons.Commons.pasthJSON));
 
             this.tasks = new List<ItemRepository>();
 
@@ -57,21 +50,27 @@ namespace ToDoListApp.Repository
         {
             int id = 1;
 
-            if (this.tasks == null) this.loadUserTasks(user);
+            if (this.tasks == null)
+            {
+                this.loadUserTasks(user);
+            }
 
-            if (this.tasks.Count > 0) id = this.tasks.Last().id + 1;
+            if (this.tasks.Count > 0)
+            {
+                id = this.tasks.Last().id + 1;
+            }
 
             ItemRepository newTask = new ItemRepository
             {
                 id = id,
                 description = task,
-                state = States[1],
+                state = Commons.Commons.States.Pending.ToString(),
                 userID = user
             };
 
             this.tasks.Add(newTask);
 
-            System.IO.File.WriteAllText(pasthJSON, JsonConvert.SerializeObject(this.tasks));
+            System.IO.File.WriteAllText(Commons.Commons.pasthJSON, JsonConvert.SerializeObject(this.tasks));
 
             return newTask;
         }
@@ -82,14 +81,23 @@ namespace ToDoListApp.Repository
             bool found = false;
             int userID = 0;
 
-            if (this.tasks == null) this.loadTasks();
+            if (this.tasks == null)
+            {
+                this.loadTasks();
+            }
 
             while (!found && index < this.tasks.Count)
             {
                 if (this.tasks[index].id == taskID)
                 {
-                    if (this.tasks[index].state == States[0]) this.tasks[index].state = States[1];
-                    else this.tasks[index].state = States[0];
+                    if (this.tasks[index].state.Equals(Commons.Commons.States.Completed.ToString()))
+                    {
+                        this.tasks[index].state = Commons.Commons.States.Pending.ToString();
+                    }
+                    else
+                    {
+                        this.tasks[index].state = Commons.Commons.States.Completed.ToString();
+                    }
                     found = true;
                     userID = this.tasks[index].userID;
                 }
@@ -97,7 +105,7 @@ namespace ToDoListApp.Repository
                 index++;
             }
 
-            System.IO.File.WriteAllText(pasthJSON, JsonConvert.SerializeObject(this.tasks));
+            System.IO.File.WriteAllText(Commons.Commons.pasthJSON, JsonConvert.SerializeObject(this.tasks));
 
             return this.getUserTasks(userID);
         }

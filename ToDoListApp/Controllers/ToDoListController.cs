@@ -1,21 +1,16 @@
-using System;
+
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using System.IO;
-using Newtonsoft.Json;
-using ToDoListApp.Service;
 using ToDoListApp.Entity;
 
 namespace ToDoListApp.Controllers
 {
     [Route("api/[controller]")]
-    public class SampleDataController : Controller
+    public class ToDoListController : Controller
     {
         private Service.ToDoListService tdlService;
 
-        public SampleDataController()
+        public ToDoListController()
         {
             tdlService = new Service.ToDoListService();
         }
