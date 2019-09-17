@@ -17,14 +17,14 @@ namespace ToDoListApp.Controllers
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<ItemList> Tasks(int startUserID)
+        public IActionResult Tasks(int startUserID)
         {
             try { 
-                return this.tdlService.getUserTasks(startUserID);
+                return Ok(this.tdlService.getUserTasks(startUserID));
             }
             catch (System.Exception e)
             {
-                return null;
+                return BadRequest("Internal Error");
             }
         }
 
@@ -41,18 +41,12 @@ namespace ToDoListApp.Controllers
 
                 this.tdlService.save();
 
-                return Ok(value: newItem);
+                return Ok(newItem);
             }
             catch (System.Exception e)
             {
                 return BadRequest("Internal Error");
             }
-        }
-
-        public class TaskModified
-        {
-            public int userID { get; set; }
-            public string task { get; set; }
         }
 
         [HttpPut("{id}")]
@@ -66,7 +60,7 @@ namespace ToDoListApp.Controllers
 
                 this.tdlService.save();
 
-                return Ok(value: this.tdlService.getUserTasks(userID));
+                return Ok(this.tdlService.getUserTasks(userID));
             }
             catch (System.Exception e)
             {
