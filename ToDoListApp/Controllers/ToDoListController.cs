@@ -1,5 +1,3 @@
-
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ToDoListApp.Entity;
@@ -9,11 +7,11 @@ namespace ToDoListApp.Controllers
     [Route("api/[controller]")]
     public class ToDoListController : Controller
     {
-        private Service.ToDoListService tdlService;
+        private readonly Service.IToDoListService tdlService;
 
-        public ToDoListController()
+        public ToDoListController(Service.IToDoListService tdlService)
         {
-            tdlService = new Service.ToDoListService();
+            this.tdlService = tdlService;
         }
 
         [HttpGet("[action]")]

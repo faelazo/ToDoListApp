@@ -4,11 +4,13 @@ using ToDoListApp.Entity;
 
 namespace ToDoListApp.Service
 {
-    interface IToDoListService
+    public interface IToDoListService
     {
         IEnumerable<ItemList> getUserTasks(int startUserID);
 
         Task<ItemList> addTask(int startUserID, string task);
+
+        void save();
 
         Task<int> changeStateTask(int taskID);
     }
