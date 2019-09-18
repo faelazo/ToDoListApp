@@ -7,7 +7,7 @@ namespace ToDoListApp.Commons
 {
     public class Commons
     {
-        public const string pasthJSON = @"./Data/tasks.json";
+        public const string pasthJSON = "./Data/tasks.json";
         public enum States
         {
             Completed, Pending
