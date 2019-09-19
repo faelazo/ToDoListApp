@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace ToDoListApp.Repository
 {
-    interface IToDoListRepository
+    public interface IToDoListRepository
     {
         void loadTasks();
         void loadUserTasks(int userID);

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ToDoListApp.Service;
+using ToDoListApp.Repository;
 
 namespace ToDoListApp
 {
@@ -29,6 +30,7 @@ namespace ToDoListApp
             });
 
             services.AddSingleton<IToDoListService, ToDoListService>();
+            services.AddSingleton<IToDoListRepository, ToDoListRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

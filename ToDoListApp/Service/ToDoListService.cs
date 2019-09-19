@@ -7,11 +7,11 @@ namespace ToDoListApp.Service
 {
     public class ToDoListService: IToDoListService
     {
-        private IToDoListRepository tdlRepository;
+        private readonly IToDoListRepository tdlRepository;
 
-        public ToDoListService()
+        public ToDoListService(IToDoListRepository tdlRepository)
         {
-            this.tdlRepository = new ToDoListRepository();
+            this.tdlRepository = tdlRepository;
         }
 
         public IEnumerable<ItemList> getUserTasks(int userID)
