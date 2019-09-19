@@ -1,9 +1,5 @@
-﻿using Moq;
-using NUnit.Framework;
-using System.Collections.Generic;
+﻿using NUnit.Framework;
 using System.Threading.Tasks;
-using ToDoListApp.Repository;
-using ToDoListApp.Service;
 
 namespace ToDoListNUnitTest
 {
@@ -11,69 +7,54 @@ namespace ToDoListNUnitTest
     class ToDoListRepository
     {
         [Test]
-        public void LoadTasks()
+        public void loadTasks()
         {
-            var mock = new Mock<IToDoListRepository>();
+            ToDoListApp.Repository.ToDoListRepository repository = new ToDoListApp.Repository.ToDoListRepository();
+            repository.loadTasks();
 
-            mock.Setup(m => m.loadTasks());
-
-            var tdlService = new ToDoListService(mock.Object);
-
-            Assert.IsNotNull(mock.Object);
+            Assert.IsNotNull(repository.getUserTasks(21));
         }
 
         [Test]
         public async Task AddTask()
         {
-            var mock = new Mock<IToDoListRepository>();
+            ToDoListApp.Repository.ToDoListRepository repository = new ToDoListApp.Repository.ToDoListRepository();
+            repository.loadTasks();
 
-            mock.Setup(m => m.loadTasks());
+            ToDoListApp.Repository.ItemRepository item = await repository.addTask(100, "New task generate by ToDoListTest");
 
-            var tdlService = new ToDoListService(mock.Object);
-
-            Assert.IsNotNull(tdlService.addTask(100, "New task by Mock"));
+            Assert.IsNotNull(item);
         }
         [Test]
         public void GetUserTasksNotExist()
         {
-            var mock = new Mock<IToDoListRepository>();
+            ToDoListApp.Repository.ToDoListRepository repository = new ToDoListApp.Repository.ToDoListRepository();
 
-            mock.Setup(m => m.getUserTasks(0)).Returns(() => new List<ItemRepository> { });
-
-            var emptyList = mock.Object.getUserTasks(0);
-
-            Assert.AreEqual(new List<ItemRepository>(), emptyList);
+            Assert.IsEmpty(repository.getUserTasks(0));
         }
 
         [Test]
         public async Task GetUserTasksExist()
         {
-            var mock = new Mock<IToDoListRepository>();
+            ToDoListApp.Repository.ToDoListRepository repository = new ToDoListApp.Repository.ToDoListRepository();
 
-            var item = new ItemRepository
-            {
-                id = 1,
-                description = "Test Task",
-                state = ToDoListApp.Commons.Commons.States.Pending.ToString(),
-                userID = 200
-            };
+            await repository.addTask(100, "New task by NUnit Test");
+            repository.save();
 
-            mock.Setup(m => m.getUserTasks(200)).Returns(() => new List<ItemRepository> { item });
-
-            mock.Object.addTask(200, "Test Task");
-            var notEmptyList = mock.Object.getUserTasks(200);
-
-            Assert.AreEqual(new List<ItemRepository> { item }, notEmptyList);
+            Assert.IsNotEmpty(repository.getUserTasks(100));
         }
 
         [Test]
         public async Task ChangeState()
         {
-            var mock = new Mock<IToDoListRepository>();
-            
-            mock.Setup(m => m.changeStateTask(It.IsAny<int>())).Returns(Task.FromResult(100));
+            ToDoListApp.Repository.ToDoListRepository repository = new ToDoListApp.Repository.ToDoListRepository();
 
-            Assert.AreEqual(mock.Object.changeStateTask(1).Result, 100);
+            ToDoListApp.Repository.ItemRepository item = await repository.addTask(101, "New task by NUnit Test");
+            repository.save();
+
+            int userID = await repository.changeStateTask(item.id);
+
+            Assert.IsTrue(userID > 0);
         }
     }
 }
