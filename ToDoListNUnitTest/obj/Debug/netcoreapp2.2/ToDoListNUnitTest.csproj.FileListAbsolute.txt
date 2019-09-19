@@ -6,7 +6,6 @@ D:\Documents\Projects\dotnet\ToDoListApp\ToDoListNUnitTest\bin\Debug\netcoreapp2
 D:\Documents\Projects\dotnet\ToDoListApp\ToDoListNUnitTest\bin\Debug\netcoreapp2.2\ToDoListApp.Views.pdb
 D:\Documents\Projects\dotnet\ToDoListApp\ToDoListNUnitTest\bin\Debug\netcoreapp2.2\NUnit3.TestAdapter.dll
 D:\Documents\Projects\dotnet\ToDoListApp\ToDoListNUnitTest\bin\Debug\netcoreapp2.2\NUnit3.TestAdapter.pdb
-D:\Documents\Projects\dotnet\ToDoListApp\ToDoListNUnitTest\bin\Debug\netcoreapp2.2\nunit.engine.netstandard.dll
 D:\Documents\Projects\dotnet\ToDoListApp\ToDoListNUnitTest\bin\Debug\netcoreapp2.2\ToDoListNUnitTest.deps.json
 D:\Documents\Projects\dotnet\ToDoListApp\ToDoListNUnitTest\bin\Debug\netcoreapp2.2\ToDoListNUnitTest.runtimeconfig.json
 D:\Documents\Projects\dotnet\ToDoListApp\ToDoListNUnitTest\bin\Debug\netcoreapp2.2\ToDoListNUnitTest.runtimeconfig.dev.json
@@ -17,3 +16,7 @@ D:\Documents\Projects\dotnet\ToDoListApp\ToDoListNUnitTest\bin\Debug\netcoreapp2
 D:\Documents\Projects\dotnet\ToDoListApp\ToDoListNUnitTest\obj\Debug\netcoreapp2.2\ToDoListNUnitTest.csproj.CopyComplete
 D:\Documents\Projects\dotnet\ToDoListApp\ToDoListNUnitTest\obj\Debug\netcoreapp2.2\ToDoListNUnitTest.dll
 D:\Documents\Projects\dotnet\ToDoListApp\ToDoListNUnitTest\obj\Debug\netcoreapp2.2\ToDoListNUnitTest.pdb
+D:\Documents\Projects\dotnet\ToDoListApp\ToDoListNUnitTest\bin\Debug\netcoreapp2.2\nunit.engine.dll
+D:\Documents\Projects\dotnet\ToDoListApp\ToDoListNUnitTest\bin\Debug\netcoreapp2.2\nunit.engine.api.dll
+D:\Documents\Projects\dotnet\ToDoListApp\ToDoListNUnitTest\bin\Debug\netcoreapp2.2\testhost.exe
+D:\Documents\Projects\dotnet\ToDoListApp\ToDoListNUnitTest\bin\Debug\netcoreapp2.2\testhost.dll
